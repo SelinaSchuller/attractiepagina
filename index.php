@@ -21,11 +21,49 @@ require_once 'admin/backend/config.php';
 
     <?php require_once 'header.php'; ?>
     <div class="container content">
+        <?php 
+        require_once 'admin/backend/conn.php';
+        $query = "SELECT * FROM rides";
+            $statement = $conn->prepare($query);
+            $statement->execute();
+            $rides = $statement->fetchAll(PDO::FETCH_ASSOC);
+        ?>
         <aside>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia modi dolore magnam! Iste libero voluptatum autem, sapiente ullam earum nostrum sed magnam vel laboriosam quibusdam, officia, esse vitae dignissimos nulla?
         </aside>
         <main>
-            <!-- hier komen de attractiekaartjes -->
+            <?php foreach($rides as $ride): 
+                if($ride['fast_pass'] = false):?>
+                <div class="card">
+                    <img src="img/attracties/<?php echo $ride['img_file'];?>" alt="img">
+                    <div class="cardText">
+                        <h2><?php echo strtoupper($ride['themeland']); ?></h2>
+                        <h4><?php echo $ride['title']; ?></h1>
+                        <p><?php echo $ride['description']; ?></p>
+                        <h3><b><?php if($ride['min_length'] == NULL){
+                            echo "Geen";} 
+                        else{
+                            echo $ride['min_length'] . "cm";} ?></b> minimale lengte</h3>
+                            <p><?php echo $ride['fast_pass']; ?></p>
+                    </div>
+                </div>
+                <?php
+                elseif($ride['fast_pass'] = true):?>
+                <div class="card large">
+                    <img src="img/attracties/<?php echo $ride['img_file'];?>" alt="img">
+                    <div class="cardText">
+                        <h2><?php echo strtoupper($ride['themeland']); ?></h2>
+                        <h4><?php echo $ride['title']; ?></h1>
+                        <p><?php echo $ride['description']; ?></p>
+                        <h3><b><?php if($ride['min_length'] == NULL){
+                            echo "Geen";} 
+                        else{
+                            echo $ride['min_length'] . "cm";} ?></b> minimale lengte</h3>
+                             <p><?php echo $ride['fast_pass']; ?></p>
+                    </div>
+                </div>
+                <?php endif;?>
+            <?php  endforeach; ?>
         </main>
     </div>
 
